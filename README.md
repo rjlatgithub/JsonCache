@@ -5,19 +5,20 @@
 
 <img src="https://github.com/rjlatgithub/JsonCache/raw/master/imgs/JsonCache.png" style="max-width:100%;width:100%;" />
 
-##Introduction
+# Introduction
+
 目前大多数缓存框架都是用Java序列化的方式实现的持久化存储，我们自己公司的项目也是这么做的，功能全面且效率也高，
 但是如果数据结构发生变化，尤其是原数据类型变化，在加载缓存时会出现异常。于是在和同事交流过程中我想到，能不能用json实现缓存？
 经过一番尝试是可行的。大致流程如下：
 
-对象bean -> Json -> String -> 压缩String -> 存储
+ - 对象bean -> Json -> String -> 压缩String -> 存储
+ - 读取 -> 压缩String -> String -> Json -> 对象bean
 
-读取 -> 压缩String -> String -> Json -> 对象bean
+这种方式和序列化方式相比，它的缓存文件要小，尤其是数据较大并且重复度高的时候，它的缓存文件要比序列化文件小几十倍，这要归功于强大的字符串压缩算法。并且即使数据结构发生变化也不会出现异常。
 
-和序列化方式相比，它缓存文件要小，尤其是数据大并且重复度高的时候，它的缓存文件要比序列化文件小几十倍，并且即使数据结构发生变化也不会出现异常。
 但为什么上图说它“毫无卵用”呢，是因为效率要比序列化方式低好几倍，这点还需要优化。
 
-##Compile
+# Compile
 ```
 // 添加仓库
 allprojects {
@@ -33,7 +34,7 @@ allprojects {
 compile 'com.github.rjlatgithub:JsonCache:v1.0.0'
 ```
 
-##Configuration
+# Configuration
 ```
 // 默认配置
 public class MyApplication extends Application {
@@ -64,7 +65,7 @@ public class MyApplication extends Application {
 }
 ```
 
-##Usage
+# Usage
 ```
 // 同步存取
 User user = new User("张三", 12);
@@ -86,8 +87,6 @@ JsonCache.getInstance().loadObjectAsync("user", User.class, new ICallback<User>(
 });
 ```
 
-##Author
-```
- - 邮箱:823668704@qq.com
- - 简书:http://www.jianshu.com/u/26ef80e64974
-```
+# Author
+- 邮箱:823668704@qq.com
+- 简书:http://www.jianshu.com/u/26ef80e64974
