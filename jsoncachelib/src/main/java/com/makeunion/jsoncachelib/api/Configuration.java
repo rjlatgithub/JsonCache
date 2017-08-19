@@ -19,22 +19,18 @@ public class Configuration {
 
     private long memoryCacheTime;
 
-    private boolean async;
-
     private String cacheDir;
 
     public Configuration(){}
 
     public Configuration(String cacheDir,
             int memoryCacheCount, long memoryCacheTime,
-            int diskCacheCount, long diskCacheTime,
-            boolean async) {
+            int diskCacheCount, long diskCacheTime) {
         this.cacheDir = cacheDir;
         this.memoryCacheCount = memoryCacheCount;
         this.memoryCacheTime = memoryCacheTime;
         this.diskCacheCount = diskCacheCount;
         this.diskCacheTime = diskCacheTime;
-        this.async = async;
     }
 
     public int getDiskCacheCount() {
@@ -67,14 +63,6 @@ public class Configuration {
 
     public void setMemoryCacheTime(long memoryCacheTime) {
         this.memoryCacheTime = memoryCacheTime;
-    }
-
-    public boolean isAsync() {
-        return async;
-    }
-
-    public void setAsync(boolean async) {
-        this.async = async;
     }
 
     public String getCacheDir() {
@@ -138,7 +126,7 @@ public class Configuration {
 
         public Configuration build() {
             return new Configuration(cacheDir, diskCacheCount, diskCacheTime,
-                    memoryCacheCount, memoryCacheTime, doAsync);
+                    memoryCacheCount, memoryCacheTime);
         }
     }
 }

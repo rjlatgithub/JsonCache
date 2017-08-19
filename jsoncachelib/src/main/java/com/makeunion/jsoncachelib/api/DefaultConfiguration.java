@@ -11,6 +11,6 @@ public class DefaultConfiguration extends Configuration {
     public DefaultConfiguration(Context context) {
         super(context.getCacheDir().getAbsolutePath(),
                 DEFAULT_MEMORY_CACHE_COUNT, Configuration.DAY,
-                DEFAULT_DISK_CACHE_COUNT, Configuration.MONTH, false);
+                DEFAULT_DISK_CACHE_COUNT, Configuration.MONTH);
     }
 }
