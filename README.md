@@ -1,6 +1,10 @@
 # JsonCache
 
 [![](https://jitpack.io/v/rjlatgithub/JsonCache.svg)](https://jitpack.io/#rjlatgithub/JsonCache)
+[![Travis](https://img.shields.io/travis/rust-lang/rust.svg)]()
+[![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14)
+[![docs](https://img.shields.io/badge/docs-30%25-green.svg)]()
+[![Hex.pm](https://img.shields.io/hexpm/l/plug.svg)]()
 
 这是一个基于FastJson和字符串压缩实现的数据缓存框架，支持内存和磁盘两级缓存。
 支持缓存基本数据类型和对象类型，存取操作都支持同步和异步两种模式，并且有丰富的配置。
