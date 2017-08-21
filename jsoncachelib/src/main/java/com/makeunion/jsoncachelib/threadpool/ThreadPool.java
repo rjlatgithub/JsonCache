@@ -6,6 +6,7 @@ import android.os.Handler;
 import com.makeunion.jsoncachelib.cache.BaseCache;
 import com.makeunion.jsoncachelib.callback.ICallback;
 
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -40,6 +41,14 @@ public class ThreadPool {
         mDiskCache = diskCache;
         mExecutor = Executors.newCachedThreadPool(
                 new DefaultThreadFactory(Thread.NORM_PRIORITY, "cache-pool-d-"));
+    }
+
+    public <T> void submitSaveList(String key, List<T> list) {
+        mExecutor.execute(new SaveListTask<T>(key, list));
+    }
+
+    public <T> void submitLoadList(String key, Class<T> clazz, ICallback<List<T>> callback) {
+        mExecutor.execute(new LoadListTask<T>(key, clazz, callback));
     }
 
     public void submitSaveObject(String key, Object object) {
@@ -80,6 +89,45 @@ public class ThreadPool {
 
     public void submitLoadDouble(String key, double defaultValue, ICallback<Double> callback) {
         mExecutor.execute(new LoadDoubleTask(key, defaultValue, callback));
+    }
+
+    private class SaveListTask<T> implements Runnable {
+
+        String key;
+        List<T> list;
+
+        public SaveListTask(String key, List<T> list) {
+            this.key = key;
+            this.list = list;
+        }
+
+        @Override
+        public void run() {
+            mMemoryCache.saveList(key, list);
+            mDiskCache.saveList(key, list);
+        }
+    }
+
+    private class LoadListTask<T> implements Runnable {
+
+        String key;
+        Class<T> clazz;
+        ICallback<List<T>> callback;
+
+        public LoadListTask(String key, Class<T> clazz, ICallback<List<T>> callback) {
+            this.key = key;
+            this.clazz = clazz;
+            this.callback = callback;
+        }
+
+        @Override
+        public void run() {
+            List<T> cache = mMemoryCache.loadList(key, clazz);
+            if (cache == null) {
+                cache = mDiskCache.loadList(key, clazz);
+            }
+            mHandler.post(new SyncRunnable<List<T>>(cache, callback));
+        }
     }
 
     private class SaveObjectTask implements Runnable {

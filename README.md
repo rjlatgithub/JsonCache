@@ -36,7 +36,7 @@ allprojects {
 
 ```
 // 添加编译
-compile 'com.github.rjlatgithub:JsonCache:v1.0.1'
+compile 'com.github.rjlatgithub:JsonCache:v1.2.0'
 ```
 
 # Configuration

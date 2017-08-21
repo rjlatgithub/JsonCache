@@ -4,10 +4,29 @@ package com.makeunion.jsoncachelib.cache;
 import com.makeunion.jsoncachelib.api.Configuration;
 import com.makeunion.jsoncachelib.io.FileHelper;
 
+import java.util.List;
+
 
 public class DiskCache extends BaseCache {
 
     private FileHelper mFileHelper;
+
+    @Override
+    public <T> void saveList(String key, List<T> list) {
+        saveObject(key, list);
+    }
+
+    @Override
+    public <T> List<T> loadList(String key, Class<T> clazz) {
+        if (key == null) {
+            return null;
+        }
+        if (clazz == null) {
+            return null;
+        }
+        byte[] data = mFileHelper.readObject(key);
+        return parseBytesToList(key, data, clazz);
+    }
 
     @Override
     public void saveObject(String key, Object object) {

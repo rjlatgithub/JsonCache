@@ -16,6 +16,9 @@ import android.widget.Toast;
 import com.makeunion.jsoncachelib.api.JsonCache;
 import com.makeunion.jsoncachelib.callback.ICallback;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -43,6 +46,38 @@ public class MainActivity extends AppCompatActivity {
             JsonCache.getInstance().clearAll();
         }
         return true;
+    }
+
+    // ========================== List ==========================
+
+    public void saveList(View view) {
+        List<String> list = new ArrayList<>();
+        list.add("1");
+        list.add("2");
+        list.add("3");
+        JsonCache.getInstance().saveList("list", list);
+    }
+
+    public void loadList(View view) {
+        List<String> list = JsonCache.getInstance().loadList("list", String.class);
+        printList(list);
+    }
+
+    public void saveListAsync(View view) {
+        List<String> list = new ArrayList<>();
+        list.add("1");
+        list.add("2");
+        list.add("3");
+        JsonCache.getInstance().saveListAsync("list", list);
+    }
+
+    public void loadListAsync(View view) {
+        JsonCache.getInstance().loadListAsync("list", String.class, new ICallback<List<String>>() {
+            @Override
+            public void onResult(List<String> result) {
+                printList(result);
+            }
+        });
     }
 
     // ========================== Object ==========================
@@ -176,5 +211,17 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         }
+    }
+
+    private void printList(List list) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("[");
+        for (Object o : list) {
+            sb.append(o.toString());
+            sb.append(",");
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        sb.append("]");
+        Toast.makeText(this, sb.toString(), Toast.LENGTH_LONG).show();
     }
 }

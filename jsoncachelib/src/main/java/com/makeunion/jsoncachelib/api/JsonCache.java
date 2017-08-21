@@ -9,6 +9,8 @@ import com.makeunion.jsoncachelib.cache.MemoryCache;
 import com.makeunion.jsoncachelib.callback.ICallback;
 import com.makeunion.jsoncachelib.threadpool.ThreadPool;
 
+import java.util.List;
+
 public class JsonCache {
 
     private static JsonCache sInstance;
@@ -60,6 +62,58 @@ public class JsonCache {
         this.mConfig = config;
         this.mMemoryCache.setConfig(config);
         this.mDiskCache.setConfig(config);
+    }
+
+    /**
+     * 保存列表
+     *
+     * @param key key
+     * @param list 列表
+     * @param <T> 泛型
+     */
+    public <T> void saveList(String key, List<T> list) {
+        mMemoryCache.saveList(key, list);
+        mDiskCache.saveList(key, list);
+    }
+
+    /**
+     * 异步保存列表
+     *
+     * @param key key
+     * @param list 列表
+     * @param <T> 泛型
+     */
+    public <T> void saveListAsync(String key, List<T> list) {
+        mThreadPool.submitSaveList(key, list);
+    }
+
+    /**
+     * 加载列表
+     *
+     * @param key key
+     * @param clazz 类型
+     * @param <T> 泛型
+     *
+     * @return 缓存
+     */
+    public <T> List<T> loadList(String key, Class<T> clazz) {
+        List<T> cache = mMemoryCache.loadList(key, clazz);
+        if (cache == null) {
+            cache = mDiskCache.loadList(key, clazz);
+        }
+        return cache;
+    }
+
+    /**
+     * 异步加载列表
+     *
+     * @param key key
+     * @param clazz 类型
+     * @param <T> 泛型
+     * @param callback 回调
+     */
+    public <T> void loadListAsync(String key, Class<T> clazz, ICallback<List<T>> callback) {
+        mThreadPool.submitLoadList(key, clazz, callback);
     }
 
     /**

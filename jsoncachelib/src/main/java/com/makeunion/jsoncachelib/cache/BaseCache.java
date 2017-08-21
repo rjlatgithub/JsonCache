@@ -6,6 +6,8 @@ import com.makeunion.jsoncachelib.api.Configuration;
 import com.makeunion.jsoncachelib.compress.CompressUtil;
 import com.makeunion.jsoncachelib.util.StringUtil;
 
+import java.util.List;
+
 
 public abstract class BaseCache {
 
@@ -14,6 +16,10 @@ public abstract class BaseCache {
     protected static final String VALUE = "value";
 
     protected Configuration mConfig;
+
+    public abstract <T> void saveList(String key, List<T> list);
+
+    public abstract <T> List<T> loadList(String key, Class<T> clazz);
 
     public abstract void saveObject(String key, Object object);
 
@@ -80,6 +86,18 @@ public abstract class BaseCache {
             return null;
         }
         return JSON.parseObject(value, clazz);
+    }
+
+    protected final <T> List<T> parseBytesToList(String key, byte[] bytes, Class<T> clazz) {
+        JSONObject jsonObject = parseJsonObject(key, bytes);
+        if (jsonObject == null) {
+            return null;
+        }
+        String value = jsonObject.getString(VALUE);
+        if (StringUtil.isNull(value)) {
+            return null;
+        }
+        return JSON.parseArray(value, clazz);
     }
 
     protected final byte[] parseStringToBytes(String value) {

@@ -20,6 +20,49 @@
             android:orientation="vertical"
             android:layout_marginTop="16dp"
             android:padding="8dp"
+            android:background="#30f00000">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="8dp"
+                android:textSize="16sp"
+                android:textColor="#353535"
+                android:text="List"
+                android:textStyle="bold"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="同步存"
+                android:onClick="saveList"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="同步取"
+                android:onClick="loadList"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="异步存"
+                android:onClick="saveListAsync"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="异步取"
+                android:onClick="loadListAsync"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp"
+            android:padding="8dp"
             android:background="#3000f000">
 
             <TextView

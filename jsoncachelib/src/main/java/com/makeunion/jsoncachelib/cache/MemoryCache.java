@@ -7,11 +7,38 @@ import com.makeunion.jsoncachelib.api.Configuration;
 import com.makeunion.jsoncachelib.log.Logger;
 
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 
 public class MemoryCache extends BaseCache {
 
     private LruCache<String, String> mLruCache;
+
+    @Override
+    public <T> void saveList(String key, List<T> list) {
+        saveObject(key, list);
+    }
+
+    @Override
+    public <T> List<T> loadList(String key, Class<T> clazz) {
+        if (key == null) {
+            return null;
+        }
+        if (clazz == null) {
+            return null;
+        }
+        String loadString = mLruCache.get(key);
+        if (loadString == null) {
+            return null;
+        }
+        byte[] bytes = null;
+        try {
+            bytes = loadString.getBytes("ISO-8859-1");
+        } catch (UnsupportedEncodingException e) {
+            Logger.e("load UnsupportedEncodingException=" + e.getMessage());
+        }
+        return parseBytesToList(key, bytes, clazz);
+    }
 
     @Override
     public void saveObject(String key, Object object) {
